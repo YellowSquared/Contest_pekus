@@ -1,62 +1,45 @@
 #include <iostream>
 
-void Swap(int& lhs, int& rhs) {
-  int tmp = lhs;
-  lhs = rhs;
-  rhs = tmp;
-}
-
-
-int PartitionHoare(int* arr, int low, int high) {
-  int pivot = arr[low];
-
-  int i = low;
-  int j = high;
-
-  for (;;) {
-    for (; arr[i] < pivot;) {
-      i++;
-    }
-
-    for (; arr[j] > pivot;) {
-      j--;
-    }
-
-    if (i >= j) {
-      return j;
-    }
-    Swap(arr[i], arr[j]);
-    i++;
-    j--;
-  }
-}
-
-
-void QuickSortHoare(int* arr, int low, int high) {
-  if (low < high) {
-    int piv = PartitionHoare(arr, low, high);
-
-    QuickSortHoare(arr, low, piv);
-    QuickSortHoare(arr, piv + 1, high);
-  }
-}
-
 int main() {
   int n = 0;
   std::cin >> n;
   int m = 0;
   std::cin >> m;
 
-  n = n + m;
-
-  int* arr = new int[n];
+  int* arr1 = new int[n];
   for (int i = 0; i < n; i++) {
-    std::cin >> arr[i];
+    std::cin >> arr1[i];
   }
 
-  QuickSortHoare(arr, 0, n - 1);
-
-  for (int i = 0; i < n; i++) {
-    std::cout << arr[i] << " ";
+  int* arr2 = new int[m];
+  for (int i = 0; i < m; i++) {
+    std::cin >> arr2[i];
   }
+
+  int pt1 = 0;
+  int pt2 = 0;
+  for (int i = 0; i < n + m && pt1 < n && pt2 < m; i++) {
+    if (arr1[pt1] <= arr2[pt2]) {
+      std::cout << arr1[pt1] << " ";
+      pt1++;
+    } else {
+      std::cout << arr2[pt2] << " ";
+      pt2++;
+    }
+  }
+
+  if (pt1 < n) {
+    for (int i = pt1; i < n; i++) {
+      std::cout << arr1[i] << " ";
+    }
+  }
+
+  if (pt2 < m) {
+    for (int i = pt2; i < m; i++) {
+      std::cout << arr2[i] << " ";
+    }
+  }
+
+  delete[] arr1;
+  delete[] arr2;
 }
