@@ -1,25 +1,11 @@
+// Быстрая сортировка Хоара (n log(n)) c лекции
 #include <iostream>
-
 void Swap(int& lhs, int& rhs) {
   int tmp = lhs;
   lhs = rhs;
   rhs = tmp;
 }
 
-int PartitionLomuto(int* arr, int low, int high) {
-  int pivot = arr[high];
-  int i = low - 1;
-
-  for (int j = low; j <= high; j++) {
-    if (arr[j] < pivot) {
-      i++;
-      Swap(arr[i], arr[j]);
-    }
-  }
-
-  Swap(arr[i + 1], arr[high]);
-  return i + 1;
-}
 
 int PartitionHoare(int* arr, int low, int high) {
   int pivot = arr[low];
@@ -43,16 +29,6 @@ int PartitionHoare(int* arr, int low, int high) {
     i++;
     j--;
   }
-}
-
-void QuickSortLomuto(int* arr, int low, int high) {
-  if (low >= high) {
-    return;
-  }
-  int piv = PartitionLomuto(arr, low, high);
-
-  QuickSortLomuto(arr, low, piv - 1);
-  QuickSortLomuto(arr, piv + 1, high);
 }
 
 void QuickSortHoare(int* arr, int low, int high) {

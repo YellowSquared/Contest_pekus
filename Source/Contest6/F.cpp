@@ -1,24 +1,17 @@
+
 #include <iostream>
+
+void PrintArray_1D(int* arr, int n) {
+  for (int i = 0; i < n; i++) {
+    std::cout << arr[i] << " ";
+  }
+  std::cout << "\n";
+}
 
 void Swap(int& lhs, int& rhs) {
   int tmp = lhs;
   lhs = rhs;
   rhs = tmp;
-}
-
-int PartitionLomuto(int* arr, int low, int high) {
-  int pivot = arr[high];
-  int i = low - 1;
-
-  for (int j = low; j <= high; j++) {
-    if (arr[j] < pivot) {
-      i++;
-      Swap(arr[i], arr[j]);
-    }
-  }
-
-  Swap(arr[i + 1], arr[high]);
-  return i + 1;
 }
 
 int PartitionHoare(int* arr, int low, int high) {
@@ -45,16 +38,6 @@ int PartitionHoare(int* arr, int low, int high) {
   }
 }
 
-void QuickSortLomuto(int* arr, int low, int high) {
-  if (low >= high) {
-    return;
-  }
-  int piv = PartitionLomuto(arr, low, high);
-
-  QuickSortLomuto(arr, low, piv - 1);
-  QuickSortLomuto(arr, piv + 1, high);
-}
-
 void QuickSortHoare(int* arr, int low, int high) {
   if (low < high) {
     int piv = PartitionHoare(arr, low, high);
@@ -66,16 +49,39 @@ void QuickSortHoare(int* arr, int low, int high) {
 
 int main() {
   int n = 0;
+
   std::cin >> n;
 
   int* arr = new int[n];
+
   for (int i = 0; i < n; i++) {
     std::cin >> arr[i];
   }
 
+  int k = 0;
+  std::cin >> k;
+
   QuickSortHoare(arr, 0, n - 1);
 
-  for (int i = 0; i < n; i++) {
-    std::cout << arr[i] << " ";
+  int* result = new int[k];
+  int fill = 0;
+
+  for (int i = 0; i < k * 2; i += 2) {
+    int interval_l = 0;
+    int interval_h = 0;
+
+    std::cin >> interval_l >> interval_h;
+
+    for (int j = 0; j < n; j++) {
+      if (arr[j] >= interval_l && arr[j] <= interval_h) {
+        result[fill]++;
+      }
+    }
+    fill++;
   }
+
+  PrintArray_1D(result, k);
+
+  delete[] arr;
+  delete[] result;
 }
