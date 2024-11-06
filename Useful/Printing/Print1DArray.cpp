@@ -1,6 +1,6 @@
 #include <iostream>
 
-void PrintArray_1D(int* arr, int n) {
+void PrintArray1D(int* arr, int n) {
   for (int i = 0; i < n; i++) {
     std::cout << arr[i] << " ";
   }

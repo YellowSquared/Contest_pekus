@@ -11,12 +11,12 @@ int64_t PartitionHoare(int64_t* arr, int64_t low, int64_t high) {
   int64_t i = low;
   int64_t j = high;
 
-  for (;;) {
-    for (; arr[i] < pivot;) {
+  while (true) {
+    while (arr[i] < pivot) {
       i++;
     }
 
-    for (; arr[j] > pivot;) {
+    while (arr[j] > pivot) {
       j--;
     }
 

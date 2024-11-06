@@ -1,12 +1,13 @@
 #include <iostream>
 
 int BinarySearch(int* arr, int target, int low, int high) {
-  for (; low <= high;) {
+  while (low <= high) {
     int mid = (high + low) / 2;
 
     if (target == arr[mid]) {
       return mid;
-    } else if (target > arr[mid]) {
+    }
+    if (target > arr[mid]) {
       low = mid + 1;
     } else {
       high = mid - 1;
