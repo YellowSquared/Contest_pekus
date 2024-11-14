@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "Введите имя программы, например: ${workspaceFolder}/a.out",
-      "args": [],
+      "args": ["std=c++20", "O2", "lm", "x", "c++"],
       "stopAtEntry": false,
       "cwd": "${fileDirname}",
       "environment": [],
