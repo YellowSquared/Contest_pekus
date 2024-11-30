@@ -20,13 +20,13 @@ class BST {
   int Height(Node *node);
   void Balance(Node *root, int &result);
 
-  Node *GetRoot() { return root; }
+  Node *GetRoot() { return root_; }
   void BranchWalk(Node *root, Node **&result, int &index);
 
  private:
   Node *Next(Node *node);
   Node *Prev(Node *node);
-  Node *root = nullptr;
+  Node *root_ = nullptr;
   Node *Search(Node *root, int key);
   void Insert(Node *&root, Node *node);
   void Erase(Node *target);
@@ -72,12 +72,12 @@ void BST::Insert(Node *&root, Node *node) {
 }
 
 void BST::Insert(int value) {
-  if (Search(root, value) != nullptr) {
+  if (Search(root_, value) != nullptr) {
     return;
   }
 
   Node *new_node = new Node{value};
-  Insert(root, new_node);
+  Insert(root_, new_node);
 }
 
 void BST::InorderWalk(Node *root) {
@@ -148,16 +148,16 @@ void BST::Erase(Node *target) {
 
   if (parent == nullptr) {
     if (target->left == nullptr && target->right == nullptr) {
-      root = nullptr;
+      root_ = nullptr;
       delete target;
       return;
     }
 
     if (target->left == nullptr || target->right == nullptr) {
       if (target->left == nullptr) {
-        root = target->right;
+        root_ = target->right;
       } else {
-        root = target->left;
+        root_ = target->left;
       }
       delete target;
       return;
@@ -230,7 +230,7 @@ void BST::Erase(Node *target) {
   delete successor;
 }
 
-void BST::Erase(int key) { Erase(Search(root, key)); }
+void BST::Erase(int key) { Erase(Search(root_, key)); }
 
 int BST::Height(Node *node) {
   if (node == nullptr) {

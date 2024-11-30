@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 
 struct Node {
@@ -8,7 +9,7 @@ struct Node {
 };
 
 class BST {
-public:
+ public:
   void InorderWalk(Node *root);
   void PreorderWalk(Node *root);
   void PostorderWalk(Node *root);
@@ -18,11 +19,14 @@ public:
   Node *Max(Node *node);
   void Erase(int key);
   int Height(Node *node);
-  void Balance(Node* root, int &result);
+  void Balance(Node *root, int &result);
+  int InorderWalk(Node *root, int cmp);
 
-  Node *GetRoot() { return root_; }
+  Node *GetRoot() {
+    return root_;
+  }
 
-private:
+ private:
   Node *Next(Node *node);
   Node *Prev(Node *node);
   Node *root_ = nullptr;
@@ -135,9 +139,13 @@ Node *BST::Max(Node *node) {
   return node;
 }
 
-Node *BST::Next(Node *node) { return Min(node->right); }
+Node *BST::Next(Node *node) {
+  return Min(node->right);
+}
 
-Node *BST::Prev(Node *node) { return Max(node->left); }
+Node *BST::Prev(Node *node) {
+  return Max(node->left);
+}
 
 void BST::Erase(Node *target) {
   if (target == nullptr) {
@@ -229,7 +237,9 @@ void BST::Erase(Node *target) {
   delete successor;
 }
 
-void BST::Erase(int key) { Erase(Search(root_, key)); }
+void BST::Erase(int key) {
+  Erase(Search(root_, key));
+}
 
 int BST::Height(Node *node) {
   if (node == nullptr) {
@@ -238,7 +248,7 @@ int BST::Height(Node *node) {
   return std::max(Height(node->left), Height(node->right)) + 1;
 }
 
-void BST::Balance(Node* root, int &result) {
+void BST::Balance(Node *root, int &result) {
   if (root != nullptr) {
     Balance(root->left, result);
     if (abs(Height(root->right) - Height(root->left)) > 1) {
@@ -248,20 +258,42 @@ void BST::Balance(Node* root, int &result) {
   }
 }
 
+int BST::InorderWalk(Node *root, int cmp) {
+  int result = cmp;
+
+  while (root != nullptr) {
+    if (root->value <= cmp) {
+      root = root->right;
+    } else {
+      result = root->value;
+      root = root->left;
+    }
+  }
+  return result;
+}
+
 int main() {
   BST bst;
   int n = 0;
   std::cin >> n;
-  while (n != 0) {
-    bst.Insert(n);
-    std::cin >> n;
-  }
-  int result = 0;
-  bst.Balance(bst.GetRoot(), result);
-  if (result == -1) {
-    std::cout << "NO";
-  } else {
-    std::cout << "YES";
+  char type_old = '0';
+  int arg_old = 0;
+
+  char type = '0';
+  int arg = 0;
+
+  for (int i = 0; i < n; i++) {
+    type_old = type;
+    std::cin >> type >> arg;
+
+    if (type == '+' and type_old == '?') {
+      bst.Insert((arg + arg_old) % 1000000000);
+    } else if (type == '+') {
+      bst.Insert(arg);
+    } else if (type == '?') {
+      arg_old = bst.InorderWalk(bst.GetRoot(), arg);
+      std::cout << arg_old << "\n";
+    }
   }
   bst.Clear(bst.GetRoot());
 }

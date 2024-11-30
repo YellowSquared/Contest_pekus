@@ -15,11 +15,11 @@ public:
   void Insert(int value);
   void Clear(Node *root);
 
-  Node *GetRoot() { return root; }
-  void SetRoot(Node *node) { root = node; }
+  Node *GetRoot() { return root_; }
+  void SetRoot(Node *node) { root_ = node; }
 
 private:
-  Node *root = nullptr;
+  Node *root_ = nullptr;
   Node *Search(Node *root, int key);
   void Insert(Node* &root, Node *node);
 };
@@ -64,12 +64,12 @@ void BST::Insert(Node* &root, Node *node) {
 }
 
 void BST::Insert(int value) {
-  if (Search(root, value) != nullptr) {
+  if (Search(root_, value) != nullptr) {
     return;
   }
 
   Node *new_node = new Node{value};
-  Insert(root, new_node);
+  Insert(root_, new_node);
 }
 
 void BST::InorderWalk(Node *root) {
