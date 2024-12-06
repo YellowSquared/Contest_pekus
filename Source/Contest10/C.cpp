@@ -44,7 +44,7 @@ class Treap {
   Node *Min(Node *node);
   Node *Max(Node *node);
   Node *Search(int key);
-  int SearchGE(Node *root, int target);
+  int Max_K(Node *root, int target);
 
  private:
   Node *root_;
@@ -189,7 +189,7 @@ void Treap::Remove(int key) {
   root_ = Remove(root_, key);
 }
 
-int Treap::SearchGE(Node *root, int target) {
+int Treap::Max_K(Node *root, int target) {
   int next = INT32_MAX;
 
   while (root != nullptr) {
@@ -221,7 +221,7 @@ int main() {
     if (type == '+') {
       treap.RandInsert(arg, gen);
     } else if (type == '?') {
-      std::cout << treap.SearchGE(treap.GetRoot(), arg) << "\n";
+      std::cout << treap.Max_K(treap.GetRoot(), arg) << "\n";
     }
   }
 }
