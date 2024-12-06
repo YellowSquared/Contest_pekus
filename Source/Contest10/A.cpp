@@ -36,7 +36,7 @@ class Treap {
   void RandInsert(int key, std::mt19937 &gen);
   void Insert(int key, int priority);
   void Remove(int key);
-  void PreorderWalk(Node *root);
+  void PreorderWalk(Node *root_);
   Node *GetRoot() {
     return root_;
   }
@@ -48,10 +48,10 @@ class Treap {
   Node *root_;
   Node *Merge(Node *l, Node *r);
   Node *Search(int key);
-  Node *Remove(Node *root, int key);
-  void Print(Node *root);
-  void Delete(Node *root);
-  Pair Split(Node *root, int key);
+  Node *Remove(Node *root_, int key);
+  void Print(Node *root_);
+  void Delete(Node *root_);
+  Pair Split(Node *root_, int key);
 };
 
 Node *Treap::Min(Node *node) {
@@ -96,19 +96,19 @@ Node *Treap::Search(int key) {
   return nullptr;
 }
 
-void Treap::Print(Node *root) {
-  if (root != nullptr) {
-    Print(root->left);
-    std::cout << root->key << ' ' << root->priority << '\n';
-    Print(root->right);
+void Treap::Print(Node *root_) {
+  if (root_ != nullptr) {
+    Print(root_->left);
+    std::cout << root_->key << ' ' << root_->priority << '\n';
+    Print(root_->right);
   }
 }
 
-void Treap::Delete(Node *root) {
-  if (root != nullptr) {
-    Delete(root->left);
-    Delete(root->right);
-    delete root;
+void Treap::Delete(Node *root_) {
+  if (root_ != nullptr) {
+    Delete(root_->left);
+    Delete(root_->right);
+    delete root_;
   }
 }
 
@@ -129,18 +129,18 @@ Node *Treap::Merge(Node *l, Node *r) {
   return r;
 }
 
-Pair Treap::Split(Node *root, int key) {
-  if (root == nullptr) {
+Pair Treap::Split(Node *root_, int key) {
+  if (root_ == nullptr) {
     return {nullptr, nullptr};
   }
-  if (key > root->key) {
-    Pair splitted = Split(root->right, key);
-    root->right = splitted.first;
-    return {root, splitted.second};
+  if (key > root_->key) {
+    Pair splitted = Split(root_->right, key);
+    root_->right = splitted.first;
+    return {root_, splitted.second};
   }
-  Pair splitted = Split(root->left, key);
-  root->left = splitted.second;
-  return {splitted.first, root};
+  Pair splitted = Split(root_->left, key);
+  root_->left = splitted.second;
+  return {splitted.first, root_};
 }
 
 void Treap::RandInsert(int key, std::mt19937 &gen) {
@@ -159,28 +159,28 @@ void Treap::Insert(int key, int priority) {
   root_ = Merge(merged, s.second);
 }
 
-Node *Treap::Remove(Node *root, int key) {
-  if (root == nullptr) {
+Node *Treap::Remove(Node *root_, int key) {
+  if (root_ == nullptr) {
     return nullptr;
   }
-  if (root->key == key) {
-    Node *node = Merge(root->left, root->right);
-    delete root;
+  if (root_->key == key) {
+    Node *node = Merge(root_->left, root_->right);
+    delete root_;
     return node;
   }
-  if (root->key < key) {
-    root->right = Remove(root->right, key);
+  if (root_->key < key) {
+    root_->right = Remove(root_->right, key);
   } else {
-    root->left = Remove(root->left, key);
+    root_->left = Remove(root_->left, key);
   }
-  return root;
+  return root_;
 }
 
-void Treap::PreorderWalk(Node *root) {
-  if (root != nullptr) {
-    std::cout << root->key << "\n";
-    PreorderWalk(root->left);
-    PreorderWalk(root->right);
+void Treap::PreorderWalk(Node *root_) {
+  if (root_ != nullptr) {
+    std::cout << root_->key << "\n";
+    PreorderWalk(root_->left);
+    PreorderWalk(root_->right);
   }
 }
 
