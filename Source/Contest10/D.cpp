@@ -36,23 +36,22 @@ class Treap {
   void RandInsert(int key, std::mt19937 &gen);
   void Insert(int key, int priority);
   void Remove(int key);
-  void PreorderWalk(Node *root);
+  void PreorderWalk(Node *root_);
   Node *GetRoot() {
     return root_;
   }
 
   Node *Min(Node *node);
   Node *Max(Node *node);
-  Node *Search(int key);
-  int Max_K(Node *root, int k);
 
  private:
   Node *root_;
   Node *Merge(Node *l, Node *r);
-  Node *Remove(Node *root, int key);
-  void Print(Node *root);
-  void Delete(Node *root);
-  Pair Split(Node *root, int key);
+  Node *Search(int key);
+  Node *Remove(Node *root_, int key);
+  void Print(Node *root_);
+  void Delete(Node *root_);
+  Pair Split(Node *root_, int key);
 };
 
 Node *Treap::Min(Node *node) {
@@ -81,7 +80,7 @@ Node *Treap::Max(Node *node) {
 
 Node *Treap::Search(int key) {
   Node *runner = root_;
-  while (runner != nullptr) {
+  while (runner) {
     if (runner->key > key) {
       runner = runner->left;
       continue;
@@ -97,19 +96,19 @@ Node *Treap::Search(int key) {
   return nullptr;
 }
 
-void Treap::Print(Node *root) {
-  if (root != nullptr) {
-    Print(root->left);
-    std::cout << root->key << ' ' << root->priority << '\n';
-    Print(root->right);
+void Treap::Print(Node *root_) {
+  if (root_ != nullptr) {
+    Print(root_->left);
+    std::cout << root_->key << ' ' << root_->priority << '\n';
+    Print(root_->right);
   }
 }
 
-void Treap::Delete(Node *root) {
-  if (root != nullptr) {
-    Delete(root->left);
-    Delete(root->right);
-    delete root;
+void Treap::Delete(Node *root_) {
+  if (root_ != nullptr) {
+    Delete(root_->left);
+    Delete(root_->right);
+    delete root_;
   }
 }
 
@@ -121,7 +120,7 @@ Node *Treap::Merge(Node *l, Node *r) {
     return l;
   }
 
-  if (l->priority < r->priority) {
+  if (l->priority > r->priority) {
     l->right = Merge(l->right, r);
     return l;
   }
@@ -130,18 +129,18 @@ Node *Treap::Merge(Node *l, Node *r) {
   return r;
 }
 
-Pair Treap::Split(Node *root, int key) {
-  if (root == nullptr) {
+Pair Treap::Split(Node *root_, int key) {
+  if (root_ == nullptr) {
     return {nullptr, nullptr};
   }
-  if (key > root->key) {
-    Pair splitted = Split(root->right, key);
-    root->right = splitted.first;
-    return {root, splitted.second};
+  if (key > root_->key) {
+    Pair splitted = Split(root_->right, key);
+    root_->right = splitted.first;
+    return {root_, splitted.second};
   }
-  Pair splitted = Split(root->left, key);
-  root->left = splitted.second;
-  return {splitted.first, root};
+  Pair splitted = Split(root_->left, key);
+  root_->left = splitted.second;
+  return {splitted.first, root_};
 }
 
 void Treap::RandInsert(int key, std::mt19937 &gen) {
@@ -160,28 +159,28 @@ void Treap::Insert(int key, int priority) {
   root_ = Merge(merged, s.second);
 }
 
-Node *Treap::Remove(Node *root, int key) {
-  if (root == nullptr) {
+Node *Treap::Remove(Node *root_, int key) {
+  if (root_ == nullptr) {
     return nullptr;
   }
-  if (root->key == key) {
-    Node *node = Merge(root->left, root->right);
-    delete root;
+  if (root_->key == key) {
+    Node *node = Merge(root_->left, root_->right);
+    delete root_;
     return node;
   }
-  if (root->key < key) {
-    root->right = Remove(root->right, key);
+  if (root_->key < key) {
+    root_->right = Remove(root_->right, key);
   } else {
-    root->left = Remove(root->left, key);
+    root_->left = Remove(root_->left, key);
   }
-  return root;
+  return root_;
 }
 
-void Treap::PreorderWalk(Node *root) {
-  if (root != nullptr) {
-    std::cout << root->key << "\n";
-    PreorderWalk(root->left);
-    PreorderWalk(root->right);
+void Treap::PreorderWalk(Node *root_) {
+  if (root_ != nullptr) {
+    std::cout << root_->key << "\n";
+    PreorderWalk(root_->left);
+    PreorderWalk(root_->right);
   }
 }
 
@@ -189,22 +188,66 @@ void Treap::Remove(int key) {
   root_ = Remove(root_, key);
 }
 
-int Treap::Max_K(Node *root, int k) {
-  int next = INT32_MAX;
+int kthLargest(Node* root, int k) {
 
-  while (root != nullptr) {
-    if (root->key == k) {
-      return root->key;
+    // return -1 if root is null
+    if (root == nullptr) return -1;
+    
+    Node* curr = root;
+    int cnt = 0;
+    
+    while (curr != nullptr) {
+        
+        // if right tree does not exists,
+        // then increment the count, check 
+        // count==k. Otherwise, 
+        // set curr = curr->left
+        if (curr->right == nullptr) {
+            cnt++;
+            
+            // return current Node
+            // if cnt == k.
+            if (cnt == k) 
+                return curr->key;
+                
+            curr = curr->left;    
+        }
+        else {
+            Node* succ = curr->right;
+            
+            // find the inorder successor
+            while (succ->left != nullptr && 
+                   succ->left != curr) {
+                succ = succ->left;
+            }
+            
+            // create a linkage between succ and
+            // curr 
+            if (succ->left == nullptr) {
+                succ->left = curr;
+                curr = curr->right;
+            }
+            
+            // if succ->left = curr, it means 
+            // we have processed the right subtree,
+            // and we can process curr node
+            else {
+                cnt++;  
+                
+                // remove the link 
+                succ->left = nullptr;
+                
+                // return current Node
+                // if cnt == k.
+                if (cnt == k) 
+                    return curr->key;
+                
+                curr = curr->left;
+            }
+        }
     }
-    if (root->key > k) {
-      next = std::min(next, root->key);
-      root = root->left;
-    } else {
-      root = root->right;
-    }
-  }
-
-  return next != INT32_MAX ? next : -1;
+    
+    return -1;
 }
 
 int main() {
@@ -214,14 +257,12 @@ int main() {
   std::cin >> n;
   for (int i = 0; i < n; i++) {
     char type = '0';
-    int arg = 0;
-
-    std::cin >> type >> arg;
-
+    int key = 0;
+    std::cin >> type >> key;
     if (type == '+') {
-      treap.RandInsert(arg, gen);
+      treap.RandInsert(key, gen);
     } else if (type == '?') {
-      std::cout << treap.Max_K(treap.GetRoot(), arg) << "\n";
+      std::cout << kthLargest(treap.GetRoot(), key) << '\n';
     }
   }
 }

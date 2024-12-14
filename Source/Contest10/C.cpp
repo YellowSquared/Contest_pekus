@@ -148,7 +148,6 @@ void Treap::RandInsert(int key, std::mt19937 &gen) {
   Pair s = Split(root_, key);
   Node *temp = new Node(key, gen);
   Node *merged = Merge(s.first, temp);
-
   root_ = Merge(merged, s.second);
 }
 

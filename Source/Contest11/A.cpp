@@ -31,7 +31,12 @@ class Treap {
   void Print() {
     Print(root_);
   };
+
+  void PrintCount(int &cnt) {
+    PrintCount(root_, cnt);
+  };
   void Insert(int key, std::mt19937 &gen);
+  void InsertExclusive(int key, std::mt19937 &gen);
   void Remove(int key);
   Node *Min(Node *node);
   Node *Max(Node *node);
@@ -42,6 +47,7 @@ class Treap {
   Node *Search(int key);
   Node *Remove(Node *root, int key);
   void Print(Node *root);
+  void PrintCount(Node *root, int &cnt);
   void Delete(Node *root);
   Pair Split(Node *root, int key);
 };
@@ -96,6 +102,14 @@ void Treap::Print(Node *root) {
   }
 }
 
+void Treap::PrintCount(Node *root, int &cnt) {
+  if (root != nullptr) {
+    PrintCount(root->left, cnt);
+    cnt++;
+    PrintCount(root->right, cnt);
+  }
+}
+
 void Treap::Delete(Node *root) {
   if (root != nullptr) {
     Delete(root->left);
@@ -143,6 +157,15 @@ void Treap::Insert(int key, std::mt19937 &gen) {
   root_ = Merge(merged, s.second);
 }
 
+void Treap::InsertExclusive(int key, std::mt19937 &gen) {
+  if (Search(key) == nullptr) {
+    Pair s = Split(root_, key);
+    Node *temp = new Node(key, gen);
+    Node *merged = Merge(s.first, temp);
+    root_ = Merge(merged, s.second);
+  }
+}
+
 Node *Treap::Remove(Node *root, int key) {
   if (root == nullptr) {
     return nullptr;
@@ -170,7 +193,7 @@ int main() {
   int inp = 0;
   std::cin >> inp;
   while (inp != 0) {
-    treap.Insert(inp, gen);
+    treap.InsertExclusive(inp, gen);
     std::cin >> inp;
   }
   treap.Print();
