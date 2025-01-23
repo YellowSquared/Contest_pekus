@@ -23,6 +23,9 @@ class BST {
     Relation relation;
   };
 
+  Node* root_ = nullptr;
+  int size_ = 0;
+
  public:
   bool Add(int value) {
     NodesPair nodes = FindParentNode(value);
@@ -95,7 +98,4 @@ class BST {
     ClearNode(node->right);
     delete node;
   };
-
-  Node* root_ = nullptr;
-  int size_ = 0;
 };
