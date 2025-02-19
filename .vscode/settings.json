@@ -56,6 +56,24 @@
     "span": "cpp",
     "sstream": "cpp",
     "variant": "cpp",
-    "cassert": "cpp"
+    "cassert": "cpp",
+    "hash_map": "cpp",
+    "hash_set": "cpp",
+    "bitset": "cpp",
+    "codecvt": "cpp",
+    "condition_variable": "cpp",
+    "forward_list": "cpp",
+    "list": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "unordered_set": "cpp",
+    "mutex": "cpp",
+    "semaphore": "cpp",
+    "stdfloat": "cpp",
+    "stop_token": "cpp",
+    "text_encoding": "cpp",
+    "thread": "cpp",
+    "cinttypes": "cpp",
+    "valarray": "cpp"
   }
 }
