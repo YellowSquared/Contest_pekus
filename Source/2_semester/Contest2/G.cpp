@@ -1,30 +1,31 @@
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include <set>
 #include <string>
 #include <map>
 
 int main() {
-  std::map<std::string, int> data{};
+  std::map<std::string, int> data = {};
+  std::map<int, std::set<std::string>> reversed = {};
+
   std::string line;
 
   while (std::getline(std::cin, line) && !line.empty()) {
-    std::stringstream s(line);
+    std::stringstream input(line);
 
     std::string word;
-    while (s >> word) {
+    while (input >> word) {
       data[word]++;
     }
   }
 
-  std::set<std::pair<int, std::string>> sortedSet;
-
-  for (auto &d : data) {
-    sortedSet.emplace(std::pair<int, std::string>(d.second, d.first));
+  for (auto it = data.begin(); it != data.end(); it++) {
+    reversed[it->second].insert(it->first);
   }
 
-  for (auto &val : sortedSet) {
-    std::cout << val.second << "\n";
+  for (auto it = reversed.rbegin(); it != reversed.rend(); it++) {
+    for (auto sub : it->second) {
+      std::cout << sub << "\n";
+    }
   }
 }
