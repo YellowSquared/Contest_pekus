@@ -1,5 +1,3 @@
-// B. Хеширование цепочками
-
 #include <cmath>
 #include <cstdint>
 #include <iostream>

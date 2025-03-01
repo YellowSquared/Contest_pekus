@@ -1,5 +1,3 @@
-// C. Хеш-таблица - открытая адресация
-
 #include <cmath>
 #include <cstdint>
 #include <iostream>
