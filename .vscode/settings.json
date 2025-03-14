@@ -75,6 +75,9 @@
     "thread": "cpp",
     "cinttypes": "cpp",
     "valarray": "cpp",
-    "any": "cpp"
+    "any": "cpp",
+    "regex": "cpp",
+    "future": "cpp",
+    "*.inc": "cpp"
   }
 }

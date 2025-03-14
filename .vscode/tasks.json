@@ -42,21 +42,7 @@
       ],
       "group": "build",
       "detail": "Задача создана отладчиком."
-    },
-    {
-      "label": "valgrind C",
-      "type": "shell",
-      "command": "valgrind '${fileDirname}/${fileBasenameNoExtension}'",
-      "presentation": {
-      "reveal": "always",
-      "panel": "shared",
-      "clear": true
-      },
-      "group": {
-      "kind": "build",
-      "isDefault": true
-      }
-      }
+    }
   ],
   "version": "2.0.0"
 }
