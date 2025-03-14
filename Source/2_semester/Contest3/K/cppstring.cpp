@@ -1,7 +1,7 @@
 #include "cppstring.h"
 
 template <class T>
-void swap(T& a, T& b) {
+void Swap(T& a, T& b) {
   T tmp = a;
   a = b;
   b = tmp;
@@ -21,18 +21,20 @@ String::String(size_t size, char symbol) {
     return;
   }
   data_ = new char[size];
-  for (int i = 0; i < size; i++) {
+  for (size_t i = 0; i < size; i++) {
     data_[i] = symbol;
   }
 }
 
 String::String(const char* str) { //NOLINT
-  size_t i = 0;
-  for (i; str[i]; i++);
-  
-  size_ = i;
-  capacity_ = i;
-  data_ = new char[i];
+  size_t count = 0;
+  for (size_t i = 0; str[i]; i++) {
+    count++;
+  }
+
+  size_ = count;
+  capacity_ = count;
+  data_ = new char[count];
 
   for (size_t i = 0; str[i]; i++) {
     data_[i] = str[i];
@@ -43,7 +45,7 @@ String::String(const char* str, size_t size) {
   size_ = size;
   capacity_ = size;
   data_ = new char[size];
-  for (size_t i = 0; str[i]; i++) {
+  for (size_t i = 0; i < size; i++) {
     data_[i] = str[i];
   }
 }
@@ -70,9 +72,7 @@ String::String(String&& other) {
 }
 
 String::~String() {
-  if (data_ != nullptr) {
-    delete[] data_;
-  }
+  delete[] data_;
 }
 
 String& String::operator=(const String& other) {
@@ -184,20 +184,21 @@ void String::Clear() {
 }
 
 void String::Swap(String& other) {
-  swap(size_, other.size_);
-  swap(capacity_, other.capacity_);
-  swap(data_, other.data_);
+  ::Swap(size_, other.size_);
+  ::Swap(capacity_, other.capacity_);
+  ::Swap(data_, other.data_);
 }
 
 void String::PopBack() {
-  data_[size_ - 1] = 0;
-  data_[size_ - 2] = '\0';
+  if (size_  > 0) {
+    data_[size_ - 1] = 0;
+    size_--;
+  }
 }
 
 void String::PushBack(char symbol) {
-  size_t tempSize = size_;
-  if (tempSize >= capacity_) {
-    Resize((size_ * 2) + 1, 0);
+  if (capacity_ < size_ + 1) {
+    Reserve(capacity_ * 2 + 1);
   }
   data_[size_] = symbol;
   size_++;
@@ -206,7 +207,7 @@ void String::PushBack(char symbol) {
 String& operator+=(String& lhs, const String& rhs) {
   size_t needed = lhs.size_ + rhs.size_;
   while (lhs.capacity_ < needed) {
-    lhs.Resize((lhs.capacity_ + 1 * 2), 0);
+    lhs.Reserve(lhs.capacity_ * 2 + 1);
   }
   for (size_t i = 0; i < rhs.size_; i++) {
     lhs.PushBack(rhs.data_[i]);
@@ -219,7 +220,7 @@ void String::Resize(size_t new_size, char symbol) {
 
   Reserve(new_size);
 
-  for (size_t i = old_size; i < size_; i++) {
+  for (size_t i = old_size; i < capacity_; i++) {
     data_[i] = symbol;
   }
   size_ = new_size;
@@ -239,7 +240,7 @@ void String::Reserve(size_t new_capacity) {
 
 void String::ShrinkToFit() {
   char* new_data = new char[size_];
-  for (size_t i = 0; data_[i]; i++) {
+  for (size_t i = 0; i < size_; i++) {
     new_data[i] = data_[i];
   }
   delete[] data_;
@@ -301,7 +302,7 @@ std::ostream& operator<<(std::ostream& os, const String& str) {
 }
 
 std::istream& operator>>(std::istream& is, String& str) {
-  char symbol;
+  char symbol = 0;
   while (is >> symbol) {
     str.PushBack(symbol);
   }
